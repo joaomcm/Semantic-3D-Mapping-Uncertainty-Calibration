@@ -31,6 +31,8 @@ from ESANet_loader import ESANetClassifier, TSegmenter
 
 val_batch_size = 128
 train_batch_size = 32
+
+#inverse class frequency weighing
 class_weights = torch.from_numpy(np.array(([ 0.86863202,  1.        ,  1.26482577,  4.97661045,  6.21128435,
         4.0068586 ,  8.72477767,  4.93037224,  5.65326448, 16.44580194,
        18.8649601 , 55.24242013, 29.60985561, 11.04643569, 20.82360894,

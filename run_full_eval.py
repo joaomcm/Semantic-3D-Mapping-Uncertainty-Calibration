@@ -32,10 +32,6 @@ def get_experiments_and_short_names():
 def compute_mIoUs():
     accuracies = []
     experiments,short_names = get_experiments_and_short_names()
-#     experiments = ["FineTuned Segformer unCalibrated","Naive Averaging", 
-# "Histogram Integration","Vector Scaling Averaged"]
-#     short_names =["Naive Bayesian","Naive Averaging", 
-#  "Histogram Integration","Vector Scaling Averaged"]
     
     
     val_scenes,test_scenes = get_larger_test_and_validation_scenes()
@@ -499,6 +495,3 @@ p1.join()
 p2.join()
 p3.join()
 
-# compute_mIoUs()
-# compute_mECEs()
-# compute_brier_scores()

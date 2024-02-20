@@ -2,7 +2,6 @@ import sys
 
 sys.path.append('./ESANet')
 from src.build_model import build_model
-# from src.confusion_matrix import ConfusionMatrixTensorflow
 from src.prepare_data import prepare_data
 import pickle
 import numpy as np

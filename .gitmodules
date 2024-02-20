@@ -1,3 +1,6 @@
 [submodule "meta-calibration"]
 	path = meta-calibration
 	url = git@github.com:joaomcm/meta-calibration.git
+[submodule "ESANet"]
+	path = ESANet
+	url = git@github.com:joaomcm/ESANet.git

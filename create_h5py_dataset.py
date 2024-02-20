@@ -5,24 +5,15 @@ if __name__ == '__main__':
     import numpy as np
     import open3d as o3d
     import open3d.core as o3c
-    import time
-    import matplotlib.pyplot as plt
-    import pandas as pd
     import cv2
     from tqdm import tqdm
     from klampt.math import se3
     import torch
-    import pdb
     from sens_reader import scannet_scene_reader
     import pickle
-    from ESANet_loader import ESANetClassifier,TSegmenter,FineTunedTSegmenter
-    from glob import glob
-    from my_calibration import Calibration_calc
-    from scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes
-    from scene_definitions import get_original_small_validation_scenes,get_smaller_test_scenes,get_fixed_train_and_val_splits
-    from scene_definitions import get_learned_calibration_validation_scenes
+    from ESANet_loader import FineTunedTSegmenter,FineTunedESANet
+    from scene_definitions import get_fixed_train_and_val_splits
     import h5py
-    import cv2
     import traceback
     import pdb
     import gc
@@ -36,7 +27,7 @@ if __name__ == '__main__':
     split = args.split
     start_saving = args.start
     end_saving = args.end
-    assert split in ['train','validation'],'The selected split, {}, is an invalid split. Valid splits are [train,validaiton]'.format(split)
+    assert split in ['train','validation'],'The selected split, {}, is an invalid split. Valid splits are [train,validation]'.format(split)
     dataset_filename = '/scratch/bbuq/jcorreiamarques/3d_calibration/h5py_datasets/calibration_{}_logits_lzf.hdf5'.format(split)
     root_dir = '/scratch/bbuq/jcorreiamarques/3d_calibration/scannet_v2'
     vbg_file_template = '/scratch/bbuq/jcorreiamarques/3d_calibration/Results/{}/vbg/{}/vbg.npz'
@@ -315,7 +306,6 @@ if __name__ == '__main__':
         from ESANet_loader import ESANetClassifier,TSegmenter,FineTunedTSegmenter
         from glob import glob
         from my_calibration import Calibration_calc
-        from scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes
         import h5py
         import cv2
 
@@ -365,8 +355,6 @@ if __name__ == '__main__':
     if(singleton_voxels):
         import h5py
         f =  h5py.File(dataset_filename,'r')
-        from scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes
-        from scene_definitions import get_learned_calibration_validation_scenes
         import numpy as np
         from tqdm import tqdm
         import pickle

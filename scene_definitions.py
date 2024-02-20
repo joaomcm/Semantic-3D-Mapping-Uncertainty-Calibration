@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import json
+
 
 SEED = 0
 
@@ -103,3 +105,14 @@ def get_ScanNet_validation_scenes():
     df = pd.read_csv('./scenes_and_contents_20_classes.csv')
     series = sorted(df.scene.tolist())
     return series
+
+
+def get_experiments_and_short_names():
+    a = json.load(open('./experiments_and_short_names.json','r'))
+    experiments = a['experiments']
+    short_names = a['short_names']
+    return experiments,short_names
+
+def get_filenames():
+    file_definitions = json.load(open('./directory_definitions.json','r'))
+    return file_definitions

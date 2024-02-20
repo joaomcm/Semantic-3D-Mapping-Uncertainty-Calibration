@@ -1,9 +1,7 @@
 import numpy as np
 import open3d as o3d
 import open3d.core as o3c
-from tqdm import tqdm
 from klampt.math import se3
-from scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes
 
 
 

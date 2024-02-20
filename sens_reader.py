@@ -203,7 +203,10 @@ class scannet_scene_reader:
 
 
 if __name__ == '__main__':
-    root_dir = "/home/motion/data/scannet_v2"
+    from scene_definitions import get_filenames
+
+    fnames = get_filenames()
+    root_dir = fnames['ScanNet_root_dir']
     my_ds = scannet_scene_reader(root_dir, 'scene0050_00')
     data_dict = my_ds[263 + 30]
 

@@ -18,7 +18,7 @@ import torch
 import pdb
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
-from scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes
+from scene_definitions import get_larger_test_and_validation_scenes,get_filenames
 import torch.nn as nn
 from pcd_utils import read_alignment
 import matplotlib.cm as cm
@@ -33,10 +33,9 @@ import open3d.visualization.rendering as rendering
 val_scenes,test_scenes = get_larger_test_and_validation_scenes()
 # selected_scenes = val_scenes[::2]
 selected_scenes = test_scenes
-
+fnames = get_filenames()
 a = json.load(open('./experiments_and_short_names.json','r'))
-results_dir = "/scratch/bbuq/jcorreiamarques/3d_calibration/Results"
-
+results_dir = fnames['results_dir']
 
 experiments = a['experiments']
 short_names = a['short_names']

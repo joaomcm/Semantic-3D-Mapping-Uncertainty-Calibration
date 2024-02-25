@@ -24,14 +24,8 @@ from pcd_utils import read_alignment
 import matplotlib.cm as cm
 import json
 import open3d.visualization.rendering as rendering
-# test scenes
-# selected_scenes = sorted(['scene0030_01', 'scene0146_01', 'scene0355_01', 'scene0518_00', 'scene0568_02',
-#  'scene0593_01','scene0651_02', 'scene0685_00'])
 
-# balanced calibration scenes
-# selected_scenes = ['scene0146_01','scene0568_02','scene0685_00']
 val_scenes,test_scenes = get_larger_test_and_validation_scenes()
-# selected_scenes = val_scenes[::2]
 selected_scenes = test_scenes
 fnames = get_filenames()
 a = json.load(open('./experiments_and_short_names.json','r'))
@@ -39,8 +33,7 @@ results_dir = fnames['results_dir']
 
 experiments = a['experiments']
 short_names = a['short_names']
-# experiments = ["Generalized Learned NLL and mDECE Loss",]
-# short_names = ["Generalized Learned NLL and mDECE Loss",]
+
 
 interactive = False
 visualize = False

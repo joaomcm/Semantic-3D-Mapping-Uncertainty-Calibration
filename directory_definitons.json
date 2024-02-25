@@ -1,6 +1,6 @@
 {
 "results_dir":"/scratch/bbuq/jcorreiamarques/3d_calibration/Results",
 "ScanNet_root_dir":"/scratch/bbuq/jcorreiamarques/3d_calibration/scannet_v2",
-"finetune_dir":"/scratch/bbuq/jcorreiamarques/3d_calibration/network_finetuning",
+"finetune_dir":"/scratch/bbuq/jcorreiamarques/3d_calibration/network_finetuning"
 
 }

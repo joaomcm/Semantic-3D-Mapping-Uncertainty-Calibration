@@ -12,7 +12,7 @@ if __name__ == '__main__':
     from sens_reader import scannet_scene_reader
     import pickle
     from ESANet_loader import FineTunedTSegmenter,FineTunedESANet
-    from scene_definitions import get_fixed_train_and_val_splits
+    from scene_definitions import get_fixed_train_and_val_splits,get_filenames
     import h5py
     import traceback
     import pdb
@@ -22,12 +22,16 @@ if __name__ == '__main__':
     parser.add_argument("--split", help="split type for which you are generating the dataset")
     parser.add_argument("--start", help="scene  start saving from",type = int)
     parser.add_argument("--end", help="scene to end saving in this task",type = int)
-
+    parser.add_argument("--model_type",help="name of the model for which the logits are being stored, valid values = [ESANET,Segformer]")
     args = parser.parse_args()
+
+    fnames = get_filenames()
     split = args.split
     start_saving = args.start
     end_saving = args.end
+    model_type = args.model_type
     assert split in ['train','validation'],'The selected split, {}, is an invalid split. Valid splits are [train,validation]'.format(split)
+    assert model_type in ['ESANET','Segformer'],'The selected model_type,{},is an invalid model. Valid model types are [ESANET,Segformer]'.format(model_type)
     dataset_filename = '/scratch/bbuq/jcorreiamarques/3d_calibration/h5py_datasets/calibration_{}_logits_lzf.hdf5'.format(split)
     root_dir = '/scratch/bbuq/jcorreiamarques/3d_calibration/scannet_v2'
     vbg_file_template = '/scratch/bbuq/jcorreiamarques/3d_calibration/Results/{}/vbg/{}/vbg.npz'

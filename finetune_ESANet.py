@@ -1,33 +1,31 @@
-import albumentations as A
-import pandas as pd
 import gc
 import sys
-sys.path.append('./ESANet')
-from my_calibration import Cumulative_mIoU_torch
-from pytorch_lightning.callbacks import Callback
-from pytorch_lightning.loggers import WandbLogger
-import pytorch_lightning as pl
-from torchmetrics.classification import MulticlassAccuracy
-from pytorch_lightning.callbacks import ModelCheckpoint
-from pytorch_lightning.callbacks.early_stopping import EarlyStopping
-import torch.optim as optim
-from src.models.model import Upsample
-from ESANet_loader import ESANetClassifier, TSegmenter
-import torch.nn as nn
-import torch
-import cv2
-from glob import glob
-import numpy as np
-from torch.utils.data import Dataset, DataLoader
-import torch.nn as nn
-import torch
-import cv2
-from datasets import Dataset
+
 import albumentations as A
+
+sys.path.append('./ESANet')
 import traceback
 from collections import OrderedDict
+from glob import glob
+
+import albumentations as A
+import cv2
+import numpy as np
+import pytorch_lightning as pl
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from datasets import Dataset
+from pytorch_lightning.callbacks import Callback, ModelCheckpoint
+from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+from pytorch_lightning.loggers import WandbLogger
+from src.models.model import Upsample
+from torch.utils.data import DataLoader, Dataset
+from torchmetrics.classification import MulticlassAccuracy
 
 from ESANet_loader import ESANetClassifier, TSegmenter
+from my_calibration import Cumulative_mIoU_torch
+from scene_definitions import get_filenames
 
 val_batch_size = 128
 train_batch_size = 32
@@ -41,6 +39,7 @@ class_weights = torch.from_numpy(np.array(([ 0.86863202,  1.        ,  1.2648257
 lr = 0.00001
 patience = 5
 warm_start = True
+fnames = get_filenames()
 checkpoint_to_load = 'jmc12_team/Finetuning ESANet/Try1:v27'
 dataset_dir = '/home/motion/data/tmp/rgbd_finetune_sample/network_finetuning/**/{}/'
 
@@ -192,14 +191,8 @@ class CombinedTrainer(pl.LightningModule):
         self.val_pred = np.array(self.val_pred)
         self.val_gt = np.array(self.val_gt)
         # pdb.set_trace()
-#         cal = mECE_Calibration_calc_3D(no_void = False,one_hot = False)
-#         cal.update_bins(semantic_label=self.val_pred,semantic_label_gt = self.val_gt)
-#         eces = cal.get_ECEs()
         mIoU = np.mean(self.mIoU_calc.get_IoUs())
-        # ,'val_mDECE':this_mDECE,'val_DECE':this_DECE)
         self.log_dict({'val_mIoU': mIoU})
-        # del this_DECE
-        # del this_mDECE
         self.val_pred = []
         self.val_gt = []
         gc.collect()
@@ -211,22 +204,6 @@ class CombinedTrainer(pl.LightningModule):
         pred = self.forward(train_batch)
         pred = pred[0]
         gt = train_batch['label'].long().to('cuda:0')
-#         if(self.both):
-#             loss = self.criterion(final_prob,log_final_prob,gt)
-#             self.log_dict({'train mDECE':self.l1,'train NLL':self.l2},on_epoch = True, on_step = False)
-#             if(self.include_grads):
-#                 grads_mDECE = torch.autograd.grad(self.l1, self.parameters(), retain_graph=True)
-#                 grads_NLL = torch.autograd.grad(self.l2, self.parameters(), retain_graph=True)
-#                 mDECE_temp_grad_norms = torch.linalg.norm(grads_mDECE[0])
-#                 NLL_temp_grad_norms = torch.linalg.norm(grads_NLL[0])
-#                 mDECE_weights_grad_norms = torch.linalg.norm(grads_mDECE[1])
-#                 NLL_weights_grad_norms = torch.linalg.norm(grads_NLL[1])
-#                 self.log_dict({'mDECE-Temp-Gradient':mDECE_temp_grad_norms,'mDECE-Weights-Gradient':mDECE_weights_grad_norms,
-#                                'NLL-Temp-Gradient':NLL_temp_grad_norms,'NLL-Weights-Gradient':NLL_weights_grad_norms})
-#         else:
-#             if(self.use_dece):
-#                 loss = self.criterion(final_prob,gt.long())
-#             else:
         loss = self.criterion(pred, gt)
         acc = self.metric(pred.argmax(axis=1).detach().cpu(), gt.cpu())
         self.log_dict(
@@ -271,8 +248,8 @@ class Validation_metric_callback(Callback):
         trainer.model.reset_validation_accumulation_buffers()
 
 
-wandb_logger = WandbLogger(name='Warm Start - fixed dataset',
-                           project='Finetuning ESANet', log_model='all', checkpoint_name='Try2')
+wandb_logger = WandbLogger(name='ESANet Finetuning',
+                           project='Finetuning ESANet', log_model='all', checkpoint_name='Try0')
 wandb_logger.log_hyperparams({'NLL_weights': class_weights, 'lr': lr, 'patience': patience,
                               'batch_size': train_batch_size})
 

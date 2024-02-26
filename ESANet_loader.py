@@ -1,19 +1,22 @@
 import sys
 
 sys.path.append('./ESANet')
-from src.build_model import build_model
-from src.prepare_data import prepare_data
 import pickle
-import numpy as np
-import torch
-import torch.nn.functional as F
-import torch.nn as nn
-from transformers import SegformerFeatureExtractor, SegformerForSemanticSegmentation
-from PIL import Image
-import pandas as pd
-from src.models.model import Upsample
+
 # from torch_scatter import scatter
 from collections import OrderedDict
+
+import numpy as np
+import pandas as pd
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from PIL import Image
+from src.build_model import build_model
+from src.models.model import Upsample
+from src.prepare_data import prepare_data
+from transformers import SegformerFeatureExtractor, SegformerForSemanticSegmentation
+
 
 class ESANetClassifier:
     def __init__(self,temperature = 1,NYU = False):

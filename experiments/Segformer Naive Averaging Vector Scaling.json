@@ -1,0 +1,1 @@
+{"integration": "Naive Averaging", "calibration": "3D Vector Scaling", "oracle": false, "L": 0, "epsilon": 1, "segmentation": "Segformer"}

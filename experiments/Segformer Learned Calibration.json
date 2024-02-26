@@ -1,0 +1,14 @@
+{
+	"integration": "Generalized",
+	"calibration": "Learned",
+	"oracle": false,
+	"L": 0,
+	"epsilon": 0,
+	"segmentation": "Segformer",
+	"learned_params": {
+		"temperature": "/scratch/bbuq/jcorreiamarques/Instance Retrieval/learned_components/Segformer Learned Calibration/temperatures.p",
+		"weights": "/scratch/bbuq/jcorreiamarques/Instance Retrieval/learned_components/Segformer Learned Calibration/weights.p",
+		"depth_spacings":1,
+        "angle_spacings":30
+	}
+}

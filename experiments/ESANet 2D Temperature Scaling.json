@@ -1,0 +1,1 @@
+{"integration": "Naive Bayesian", "calibration": "2D Temperature Scaling", "oracle": false, "L": 0, "epsilon": 1, "segmentation": "ESANet"}

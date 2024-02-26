@@ -1,0 +1,8 @@
+{
+	"integration": "Geometric Mean",
+	"calibration": "None",
+	"oracle": false,
+	"L": 0,
+	"epsilon": 1,
+	"segmentation": "ESANet"
+}

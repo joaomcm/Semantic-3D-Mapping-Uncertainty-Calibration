@@ -2,8 +2,10 @@ if __name__ == "__main__":
     import argparse
     import gc
     import os
+    import pdb
     import pickle
     import traceback
+    from glob import glob
     from os import environ
 
     import cv2
@@ -14,6 +16,8 @@ if __name__ == "__main__":
     import open3d.core as o3c
     import torch
     from klampt.math import se3
+    from torch.nn.utils.rnn import pad_sequence
+    from torch.utils.data import DataLoader, Dataset
     from tqdm import tqdm
 
     from ESANet_loader import FineTunedESANet, FineTunedTSegmenter
@@ -531,4 +535,120 @@ if __name__ == "__main__":
 
         f.close()
     if singleton_voxels_h5py:
-        pass
+
+        create = True
+        evaluate = False
+        filename = fnames['per_voxel_h5py_dataset_dir']+'/{}_{}.h5py'.format(model_type,split)
+        train_directory = fnames["singleton_dataset_dir"] + '/{}/{}/**/*.p'.format(model_type,split)
+        class voxel_readings_dataset(Dataset):
+            def __init__(self,ds_directory,max_obs = 1000,start = 0):
+                self.ds_directory = ds_directory
+                self.files = sorted(glob(self.ds_directory,recursive=True))[start:]
+                self.max_obs = max_obs
+            def __len__(self):
+                return len(self.files)
+            def __getitem__(self,idx):
+                sample = pickle.load(open(self.files[idx],'rb'))
+                keys = ['logits', 'depth', 'angle']
+                if(sample[keys[0]].shape[0] > self.max_obs):
+                    chosen_indices = np.random.choice(sample[keys[0]].shape[0],self.max_obs, replace = False)
+                    for key in keys:
+                        tmp = sample[key][chosen_indices]
+                        sample.update({key:tmp})
+                    
+                return sample
+
+        def debug_collate(data):
+            keys = ['logits', 'depth', 'angle']
+            result = {}
+            for key in keys:
+                tmp = []
+                for d in data:
+                    sample = d[key]
+                    tmp.append(torch.Tensor(sample))
+                    
+                result.update({key:tmp})
+                
+            labels = [d['gt'] for d in data]
+            padded_ds = {}
+            for key in keys:
+                padded_ds.update({key:pad_sequence(result[key],batch_first = True)})
+            padded_ds.update({'label':torch.tensor(np.array(labels))})
+            del result
+            del data
+            return padded_ds
+        
+        start = 0
+        train_ds = voxel_readings_dataset(train_directory,start = start)
+        train_dataloader = DataLoader(train_ds,batch_size = 1,shuffle = False,collate_fn = debug_collate,num_workers = 12,prefetch_factor = 3)
+
+        if(create):
+            print('entering creation?')
+            f = h5py.File(filename,'w')
+
+            lim = len(train_ds)
+            try:
+                logits = f.create_dataset("logits", (lim,1000,21), maxshape=(None, 1000,21),chunks = (1,1000,21),dtype = np.float16,compression = 'lzf')
+                depths = f.create_dataset("depth", (lim,1000), maxshape=(None, 1000),chunks = (1,1000),dtype = np.float16,compression = 'lzf')
+                angles = f.create_dataset("angle", (lim,1000), maxshape=(None, 1000),chunks = (1,1000),dtype = np.float16,compression = 'lzf')
+                labels = f.create_dataset("label", (lim,1), maxshape=(None, 1),chunks = (1,1),dtype = np.uint8,compression = 'lzf')
+            except Exception as e:
+                print(e)
+                logits = f["logits"]
+                depths = f["depth"]
+                angles = f["angle"]
+                labels = f["label"]
+                
+            # g = f.create_group('train')
+
+            lim = len(train_ds)
+
+            i = start
+            for dct in tqdm(train_dataloader):
+                logit = dct['logits'].cpu().numpy().astype(np.float16)
+                depth = dct['depth'].cpu().numpy().astype(np.float16)
+                angle = dct['angle'].cpu().numpy().astype(np.float16)
+                label = dct['label'].cpu().numpy().astype(np.uint8).flatten()
+                entries = logit.shape[1]  
+                logits[i,:entries,:] = logit
+                depths[i,:entries] = depth
+                angles[i,:entries] = angle
+                labels[i,0] = label
+                i+=1
+            f.close()
+
+        if(evaluate):
+            print('entering evaluation')
+            class voxel_readings_dataset2(Dataset):
+                def __init__(self,ds_directory,size = 900000):
+                    self.ds_directory = ds_directory
+                    self.size = size
+                    self.split = split
+                def h5py_worker_init(self):
+                    print('starting h5py dataset')
+                    self.f = h5py.File(self.ds_directory,'r')
+                    self.logits = self.f['logits']
+                    self.depth = self.f['depth']
+                    self.angle = self.f['angle']
+                    self.label = self.f['label']
+                    
+                def __len__(self):
+                    return self.size
+                def __getitem__(self,idx):
+                    sample = {'logits':self.logits[idx,:,:],'depth':self.depth[idx,:],
+                            'angle':self.angle[idx,:],'label':self.label[idx]}
+                    return sample
+            
+            def worker_init_fn(worker_id):
+                worker_info = torch.utils.data.get_worker_info()
+                dataset = worker_info.dataset
+                dataset.h5py_worker_init()
+
+
+            size = h5py.File(filename,'r')['logits'].shape[0]
+            train_ds2 = voxel_readings_dataset2(filename,size = size)
+            train_dataloader2 = DataLoader(train_ds2,batch_size = 9000,shuffle = True,num_workers = 3,worker_init_fn = worker_init_fn,persistent_workers = True)
+            # train_dataloader = DataLoader(train_ds,batch_size = 9000,shuffle = False,collate_fn = debug_collate,num_workers = 8,prefetch_factor = 3)
+
+            for i in tqdm(train_dataloader2,desc = 'h5py dataloader'):
+                c = i

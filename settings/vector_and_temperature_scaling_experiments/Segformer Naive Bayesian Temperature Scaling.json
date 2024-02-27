@@ -1,0 +1,8 @@
+{
+	"experiment_name": "Segformer Naive Bayesian Temperature Scaling",
+	"segmentation_model": "Segformer",
+	"max_bounds": 300,
+	"min_bounds": 0.01,
+	"rec_type": "Naive Bayesian",
+	"segmentation": "Segformer"
+}

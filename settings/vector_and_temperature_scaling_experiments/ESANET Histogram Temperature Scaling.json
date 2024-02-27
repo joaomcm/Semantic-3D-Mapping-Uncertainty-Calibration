@@ -1,0 +1,8 @@
+{
+	"experiment_name": "ESANET Histogram Temperature Scaling",
+	"segmentation_model": "ESANET",
+	"max_bounds": 5,
+	"min_bounds": 0.1,
+	"rec_type": "Histogram",
+	"segmentation": "ESANET"
+}

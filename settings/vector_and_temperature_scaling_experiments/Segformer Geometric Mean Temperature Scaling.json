@@ -1,0 +1,8 @@
+{
+	"experiment_name": "Segformer Geometric Mean Temperature Scaling",
+	"segmentation_model": "Segformer",
+	"max_bounds": 5,
+	"min_bounds": 0.01,
+	"rec_type": "Geometric Mean",
+	"segmentation": "Segformer"
+}

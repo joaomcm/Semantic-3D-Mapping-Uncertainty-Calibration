@@ -1,0 +1,8 @@
+{
+	"experiment_name": "ESANET Naive Bayesian Vector Scaling",
+	"segmentation_model": "ESANET",
+	"max_bounds": 100,
+	"min_bounds": 60,
+	"rec_type": "Naive Bayesian",
+	"segmentation": "ESANET"
+}

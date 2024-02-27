@@ -1,0 +1,8 @@
+{
+	"experiment_name": "Segformer Histogram Vector Scaling",
+	"segmentation_model": "Segformer",
+	"max_bounds": 1.3,
+	"min_bounds": 0.01,
+	"rec_type": "Histogram",
+	"segmentation": "Segformer"
+}

@@ -1,0 +1,8 @@
+{
+	"experiment_name": "ESANET Histogram Vector Scaling",
+	"segmentation_model": "ESANET",
+	"max_bounds": 1.5,
+	"min_bounds": 0.01,
+	"rec_type": "Histogram",
+	"segmentation": "ESANET"
+}

@@ -1,0 +1,8 @@
+{
+	"experiment_name": "ESANET Geometric Mean Vector Scaling",
+	"segmentation_model": "ESANET",
+	"max_bounds": 1.2,
+	"min_bounds": 0.001,
+	"rec_type": "Geometric Mean",
+	"segmentation": "ESANET"
+}

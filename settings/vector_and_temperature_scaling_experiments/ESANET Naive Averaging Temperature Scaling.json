@@ -1,0 +1,8 @@
+{
+	"experiment_name": "ESANET Naive Averaging Temperature Scaling",
+	"segmentation_model": "ESANET",
+	"max_bounds": 5,
+	"min_bounds": 0.01,
+	"rec_type": "Naive Averaging",
+	"segmentation": "ESANET"
+}

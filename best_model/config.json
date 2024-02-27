@@ -1,0 +1,116 @@
+{
+  "_name_or_path": "nvidia/segformer-b4-finetuned-ade-512-512",
+  "architectures": [
+    "SegformerForSemanticSegmentation"
+  ],
+  "attention_probs_dropout_prob": 0.0,
+  "classifier_dropout_prob": 0.1,
+  "decoder_hidden_size": 768,
+  "depths": [
+    3,
+    8,
+    27,
+    3
+  ],
+  "downsampling_rates": [
+    1,
+    4,
+    8,
+    16
+  ],
+  "drop_path_rate": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.0,
+  "hidden_sizes": [
+    64,
+    128,
+    320,
+    512
+  ],
+  "id2label": {
+      "0":"irrelevant",
+      "1":"wall",
+      "2":"floor",
+      "3":"cabinet",
+      "4":"bed",
+      "5":"chair",
+      "6":"sofa",
+      "7":"table",
+      "8":"door",
+      "9":"window",
+      "10":"bookshelf",
+      "11":"picture",
+      "12":"counter",
+      "13":"desk",
+      "14":"curtain",
+      "15":"refridgerator",
+      "16":"shower curtain",
+      "17":"toilet",
+      "18":"sink",
+      "19":"bathtub",
+      "20":"otherfurniture"
+  },
+  "image_size": 224,
+  "initializer_range": 0.02,
+  "label2id": {
+    "irrelevant":"0",
+    "wall":"1",
+    "floor":"2",
+    "cabinet":"3",
+    "bed":"4",
+    "chair":"5",
+    "sofa":"6",
+    "table":"7",
+    "door":"8",
+    "window":"9",
+    "bookshelf":"10",
+    "picture":"11",
+    "counter":"12",
+    "desk":"13",
+    "curtain":"14",
+    "refridgerator":"15",
+    "shower curtain":"16",
+    "toilet":"17",
+    "sink":"18",
+    "bathtub":"19",
+    "otherfurniture":"20"
+    },
+  "layer_norm_eps": 1e-06,
+  "mlp_ratios": [
+    4,
+    4,
+    4,
+    4
+  ],
+  "model_type": "segformer",
+  "num_attention_heads": [
+    1,
+    2,
+    5,
+    8
+  ],
+  "num_channels": 3,
+  "num_encoder_blocks": 4,
+  "patch_sizes": [
+    7,
+    3,
+    3,
+    3
+  ],
+  "reshape_last_stage": true,
+  "semantic_loss_ignore_index": 255,
+  "sr_ratios": [
+    8,
+    4,
+    2,
+    1
+  ],
+  "strides": [
+    4,
+    2,
+    2,
+    2
+  ],
+  "torch_dtype": "float32",
+  "transformers_version": "4.21.3"
+}

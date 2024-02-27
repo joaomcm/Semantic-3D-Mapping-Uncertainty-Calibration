@@ -1,4 +1,4 @@
-name: /scratch/bbuq/jcorreiamarques/learned_3d_fusion
+name: learned_3d_fusion
 channels:
   - defaults
 dependencies:

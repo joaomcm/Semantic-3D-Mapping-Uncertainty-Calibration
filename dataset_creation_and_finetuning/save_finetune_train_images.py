@@ -22,7 +22,7 @@ from joblib import Parallel,delayed
 import gc
 import cv2
 import os
-from scene_definitions import get_filenames
+from utils.scene_definitions import get_filenames
 
 def reading_func(scene):
     lim = -1

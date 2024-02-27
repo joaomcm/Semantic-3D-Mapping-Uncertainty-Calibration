@@ -2,7 +2,7 @@ import albumentations as A
 import gc
 import sys
 sys.path.append('./ESANet')
-from my_calibration import Cumulative_mIoU_torch
+from utils.my_calibration import Cumulative_mIoU_torch
 from pytorch_lightning.callbacks import Callback
 from pytorch_lightning.loggers import WandbLogger
 import pytorch_lightning as pl

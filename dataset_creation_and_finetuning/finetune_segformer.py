@@ -13,7 +13,7 @@ from transformers import (
     TrainingArguments,
 )
 
-from scene_definitions import get_filenames
+from utils.scene_definitions import get_filenames
 
 fnames = get_filenames()
 device = "cuda:0" if torch.cuda.is_available() else "cpu"

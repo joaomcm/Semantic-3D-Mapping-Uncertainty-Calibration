@@ -22,7 +22,7 @@ from klampt.math import se3
 from sens_reader import scannet_scene_reader
 import pickle
 import traceback
-from scene_definitions import get_larger_test_and_validation_scenes,get_filenames
+from utils.scene_definitions import get_larger_test_and_validation_scenes,get_filenames
 import gc
 from experiment_setup import Experiment_Generator
 from functools import partial

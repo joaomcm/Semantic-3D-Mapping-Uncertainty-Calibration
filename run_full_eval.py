@@ -16,7 +16,7 @@ import time
 import torch.nn as nn
 import torch
 from torchmetrics.functional import jaccard_index
-from scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes,get_classes
+from utils.scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes,get_classes
 import json
 import pdb
 
@@ -182,10 +182,10 @@ import torch
 import seaborn as sns
 import pdb
 import torch
-from my_calibration import Calibration_calc_3D,mECE_Calibration_calc_3D_fix,mECE_Calibration_calc_3D
+from utils.my_calibration import Calibration_calc_3D,mECE_Calibration_calc_3D_fix,mECE_Calibration_calc_3D
 from ESANet_loader import ESANetClassifier, TSegmenter
 from sklearn.metrics import confusion_matrix
-from scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes,get_classes
+from utils.scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes,get_classes
 import pickle
 import json
 
@@ -369,8 +369,8 @@ import time
 import torch.nn as nn
 import torch
 from torchmetrics.functional import jaccard_index
-from my_calibration import Calibration_calc_3D, mECE_Calibration_calc_3D,BrierScore3D
-from scene_definitions import get_larger_test_and_validation_scenes
+from utils.my_calibration import Calibration_calc_3D, mECE_Calibration_calc_3D,BrierScore3D
+from utils.scene_definitions import get_larger_test_and_validation_scenes
 import json
 import pdb
 

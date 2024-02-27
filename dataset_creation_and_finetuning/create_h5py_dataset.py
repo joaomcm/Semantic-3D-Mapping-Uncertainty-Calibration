@@ -22,8 +22,8 @@ if __name__ == "__main__":
 
     from ESANet_loader import FineTunedESANet, FineTunedTSegmenter
     from experiment_setup import Experiment_Generator
-    from rendering_utils import get_camera_rays, render_depth_and_normals
-    from scene_definitions import get_filenames, get_fixed_train_and_val_splits
+    from utils.rendering_utils import get_camera_rays, render_depth_and_normals
+    from utils.scene_definitions import get_filenames, get_fixed_train_and_val_splits
     from sens_reader import scannet_scene_reader
 
     parser = argparse.ArgumentParser()

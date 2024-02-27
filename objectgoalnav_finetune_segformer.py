@@ -10,7 +10,7 @@ from torchvision.transforms import ColorJitter
 from glob import glob
 import pandas as pd
 import albumentations as A
-from my_calibration import Cumulative_mIoU
+from utils.my_calibration import Cumulative_mIoU
 from tqdm import tqdm
 import wandb
 

@@ -3,7 +3,7 @@ import cv2
 from glob import glob
 import numpy as np
 from PIL import Image
-from scene_definitions import get_filenames
+from utils.scene_definitions import get_filenames
 
 fnames = get_filenames()
 images_dir = fnames['finetune_dir']

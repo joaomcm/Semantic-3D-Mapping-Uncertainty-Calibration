@@ -18,7 +18,7 @@ import torch
 import pdb
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
-from scene_definitions import get_larger_test_and_validation_scenes,get_filenames
+from utils.scene_definitions import get_larger_test_and_validation_scenes,get_filenames
 import torch.nn as nn
 from pcd_utils import read_alignment
 import matplotlib.cm as cm

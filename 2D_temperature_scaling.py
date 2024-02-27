@@ -6,9 +6,9 @@ from glob import glob
 import h5py
 import torch
 import torch.nn as nn
-from my_calibration import mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D
+from utils.my_calibration import mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D
 import argparse
-from scene_definitions import get_filenames
+from utils.scene_definitions import get_filenames
 
 
 class Calibrator:

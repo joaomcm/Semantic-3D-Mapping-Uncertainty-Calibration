@@ -11,7 +11,7 @@ from klampt.math import se3
 import pickle
 import torch
 import pdb
-from rendering_utils import render_depth_and_normals,get_camera_rays
+from utils.rendering_utils import render_depth_and_normals,get_camera_rays
 import torch.utils.dlpack
 from torch import linalg as LA
 import torch.nn as nn

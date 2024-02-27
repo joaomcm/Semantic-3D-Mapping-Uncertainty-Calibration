@@ -29,8 +29,8 @@ import pytorch_lightning as pl
 from pytorch_lightning.loggers import WandbLogger
 from meta_calibration.Losses.dece import DECE, mDECE
 from pytorch_lightning.callbacks import Callback
-from my_calibration import Cumulative_mIoU
-from my_calibration import mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D
+from utils.my_calibration import Cumulative_mIoU
+from utils.my_calibration import mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D
 import gc
 import h5py
 import argparse

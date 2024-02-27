@@ -24,8 +24,8 @@ from torch.utils.data import DataLoader, Dataset
 from torchmetrics.classification import MulticlassAccuracy
 
 from ESANet_loader import ESANetClassifier, TSegmenter
-from my_calibration import Cumulative_mIoU_torch
-from scene_definitions import get_filenames
+from utils.my_calibration import Cumulative_mIoU_torch
+from utils.scene_definitions import get_filenames
 
 val_batch_size = 128
 train_batch_size = 32

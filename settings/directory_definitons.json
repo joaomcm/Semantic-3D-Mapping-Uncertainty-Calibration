@@ -4,6 +4,5 @@
 "finetune_dir":"/scratch/bbuq/jcorreiamarques/3d_calibration/network_finetuning",
 "h5py_dataset_dir":"/scratch/bbuq/jcorreiamarques/3d_calibration/h5py_datasets",
 "singleton_dataset_dir":"/scratch/bbuq/jcorreiamarques/3d_calibration/per_voxel",
-"per_voxel_h5py_dataset_dir":"/scratch/bbuq/jcorreiamarques/3d_calibration/per_voxel",
 "ScanNet_huggingface_dataset_dir":"/scratch/bbuq/jcorreiamarques/3d_calibration/hugdata"
 }

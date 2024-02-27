@@ -21,10 +21,10 @@ if __name__ == "__main__":
     from tqdm import tqdm
 
     from ESANet_loader import FineTunedESANet, FineTunedTSegmenter
-    from experiment_setup import Experiment_Generator
+    from calibration_experiments.experiment_setup import Experiment_Generator
     from utils.rendering_utils import get_camera_rays, render_depth_and_normals
     from utils.scene_definitions import get_filenames, get_fixed_train_and_val_splits
-    from sens_reader import scannet_scene_reader
+    from utils.sens_reader import scannet_scene_reader
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -538,7 +538,7 @@ if __name__ == "__main__":
 
         create = True
         evaluate = False
-        filename = fnames['per_voxel_h5py_dataset_dir']+'/{}_{}.h5py'.format(model_type,split)
+        filename = fnames['singleton_dataset_dir']+'/{}_{}.h5py'.format(model_type,split)
         train_directory = fnames["singleton_dataset_dir"] + '/{}/{}/**/*.p'.format(model_type,split)
         class voxel_readings_dataset(Dataset):
             def __init__(self,ds_directory,max_obs = 1000,start = 0):

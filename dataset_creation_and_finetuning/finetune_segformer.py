@@ -26,7 +26,6 @@ COLORS = np.array([
 ]).astype(np.uint8)
 
 model.train()
-# model = model.from_pretrained('best_model')
 for param in model.parameters():
     param.requires_grad = False
 decoder_head = model.decode_head

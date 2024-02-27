@@ -4,3 +4,9 @@
 [submodule "ESANet"]
 	path = ESANet
 	url = git@github.com:joaomcm/ESANet.git
+[submodule "external_dependencies/ESANet"]
+	path = external_dependencies/ESANet
+	url = git@github.com:joaomcm/ESANet.git
+[submodule "external_dependencies/meta-calibration"]
+	path = external_dependencies/meta-calibration
+	url = git@github.com:joaomcm/meta-calibration.git

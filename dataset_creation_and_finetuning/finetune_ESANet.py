@@ -38,10 +38,13 @@ class_weights = torch.from_numpy(np.array(([ 0.86863202,  1.        ,  1.2648257
         7.48407616])).astype(np.float32)).float()
 lr = 0.00001
 patience = 5
-warm_start = True
-fnames = get_filenames()
+# if you want to resume finetuning from a given W&B checkpoint, set this to true and give it the checkpoint to follow
+warm_start = False
 checkpoint_to_load = 'jmc12_team/Finetuning ESANet/Try1:v27'
-dataset_dir = '/home/motion/data/tmp/rgbd_finetune_sample/network_finetuning/**/{}/'
+
+fnames = get_filenames()
+
+dataset_dir = fnames['finetune_dir']+ '/**/{}/'
 
 
 def get_clean_model_params(wandbdirectory,logger):

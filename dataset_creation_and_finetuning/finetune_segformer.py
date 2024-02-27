@@ -1,18 +1,24 @@
+import evaluate
 import numpy as np
-import torch.nn as nn
 import torch
+import torch.nn as nn
 from datasets import Dataset
-import numpy as np
+from torch import nn
 from torchvision.transforms import ColorJitter
-# from transformers import SegformerFeatureExtractor
-from transformers import SegformerFeatureExtractor, SegformerForSemanticSegmentation
-from transformers import TrainingArguments
-from transformers import Trainer
+from transformers import (
+    EarlyStoppingCallback,
+    SegformerFeatureExtractor,
+    SegformerForSemanticSegmentation,
+    Trainer,
+    TrainingArguments,
+)
 
+from scene_definitions import get_filenames
 
+fnames = get_filenames()
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 model =  SegformerForSemanticSegmentation.from_pretrained("nvidia/segformer-b4-finetuned-ade-512-512").to(device)
-working_dir = '/projects/perception/personals/joao/finetuning_segformer'
+huggingface_dataset_dir = fnames["ScanNet_huggingface_dataset_dir"]
 
 COLORS = np.array([
     [0,0,0],[151,226,173],[174,198,232],[31,120,180],[255,188,120],[188,189,35],[140,86,74],[255,152,151],[213,39,40],[196,176,213],[148,103,188],[196,156,148],
@@ -44,7 +50,7 @@ print('}')
 feature_extractor = SegformerFeatureExtractor.from_pretrained("nvidia/segformer-b4-finetuned-ade-512-512")
 feature_extractor.reduce_labels = False
 
-ds = Dataset.load_from_disk('{}/hugdata'.format(working_dir))
+ds = Dataset.load_from_disk(huggingface_dataset_dir)
 ds = ds
 ds = ds.train_test_split(test_size=0.2)
 train_ds = ds["train"]
@@ -73,16 +79,6 @@ def val_transforms(example_batch):
 train_ds.set_transform(train_transforms)
 test_ds.set_transform(val_transforms)
 
-# from tqdm import tqdm
-# total_pixels = np.zeros(21)
-# for i in tqdm(train_ds):
-#     a,b = np.unique(i['labels'],return_counts = True)
-#     total_pixels[a] += b
-
-# weights = total_pixels/total_pixels.sum()
-# weights = 1/weights
-# weights = weights/weights[1:].min()
-# weights
 # inverse class frequency error weighing
 weights = np.array(([ 0.86863202,  1.        ,  1.26482577,  4.97661045,  6.21128435,
         4.0068586 ,  8.72477767,  4.93037224,  5.65326448, 16.44580194,
@@ -115,11 +111,6 @@ training_args = TrainingArguments(
     metric_for_best_model='mean_iou'
 )
 
-
-import torch
-from torch import nn
-import evaluate
-from transformers import EarlyStoppingCallback
 metric = evaluate.load("mean_iou")
 
 def compute_metrics(eval_pred):
@@ -187,7 +178,7 @@ trainer = CustomTrainer(
 
 trainer.train()
 
-
-trainer.save_model("{}/best_model2".format(working_dir))
+#saving the trained model to the best_model directory
+trainer.save_model("./best_model")
 
 

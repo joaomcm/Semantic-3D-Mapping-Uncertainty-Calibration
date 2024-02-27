@@ -8,6 +8,7 @@ import torch
 import torch.nn as nn
 from my_calibration import mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D
 import argparse
+from scene_definitions import get_filenames
 
 
 class Calibrator:
@@ -41,7 +42,7 @@ def main():
     from bayes_opt.util import load_logs
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_name", type = str,help="the name of the settings file to load that fully specifies this experiment")
+    parser.add_argument("--model_name", type = str,help="The name of the model used for semantic segmentation [ESANet,Segformer]")
     parser.add_argument("--debug",action="store_true")
     args = parser.parse_args()
     model_name = args.model_name
@@ -50,7 +51,7 @@ def main():
     min_bounds = 0.01
     max_bounds = 200
     pbounds= {'T':(np.log(0.01),np.log(200))}
-
+    fnames = get_filenames()
     if(model_name == 'Segformer'):
         if(args.debug):
             filename = '/scratch/bbuq/jcorreiamarques/3d_calibration/h5py_datasets/calibration_validation_logits_lzf.hdf5'

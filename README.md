@@ -4,10 +4,12 @@ This repository contains the code for reproducing the work of the ICRA 2024 pape
 
 ## Setup instructions
 
-1) Create the virtual environment, e.g. ``` conda env create -n learned_3d_fusion python=3.7 ```
+1) Clone this repository and its submodules : ``` git clone --recurse-submodules git@github.com:joaomcm/Semantic-3D-Mapping-Uncertainty-Calibration.git ```
 
-2) Activate the virtual environment: ``` conda activate learned_3d_fusion ```
+2) Create the virtual environment, e.g. ``` conda env create -n learned_3d_fusion python=3.7 ```
 
-3) Install almost all the required packages: ``` pip install -r requirements.txt ```
+3) Activate the virtual environment: ``` conda activate learned_3d_fusion ```
 
-4) Install torch for your cuda version as in : ```  pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1  --extra-index-url https://download.pytorch.org/whl/cu117 ```
+4) Install almost all the required packages: ``` pip install -r requirements.txt ```
+
+5) Install torch for your cuda version as in : ```  pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1  --extra-index-url https://download.pytorch.org/whl/cu117 ```

@@ -23,7 +23,7 @@ from src.models.model import Upsample
 from torch.utils.data import DataLoader, Dataset
 from torchmetrics.classification import MulticlassAccuracy
 
-from ESANet_loader import ESANetClassifier, TSegmenter
+from utils.segmentation_model_loader import ESANetClassifier, TSegmenter
 from utils.my_calibration import Cumulative_mIoU_torch
 from utils.scene_definitions import get_filenames
 

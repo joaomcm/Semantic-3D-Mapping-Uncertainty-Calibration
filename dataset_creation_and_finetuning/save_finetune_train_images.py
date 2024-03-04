@@ -12,7 +12,7 @@ from klampt.math import se3
 import pdb
 from sens_reader import scannet_scene_reader
 # import pickle
-# from ESANet_loader import ESANetClassifier,TSegmenter
+# from utils.segmentation_model_loader import ESANetClassifier,TSegmenter
 from glob import glob
 # from my_calibration import Calibration_calc
 # from scipy.optimize import minimize_scalar,Bounds

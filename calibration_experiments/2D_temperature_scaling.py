@@ -40,7 +40,7 @@ def main():
     from bayes_opt.logger import JSONLogger
     from bayes_opt.event import Events
     from bayes_opt.util import load_logs
-
+    fnames = get_filenames()
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type = str,help="The name of the model used for semantic segmentation [ESANet,Segformer]")
     parser.add_argument("--debug",action="store_true")
@@ -75,12 +75,12 @@ def main():
 
 
     try:
-        os.makedirs('./bayes_logs/{}/'.format(exp_name))
+        os.makedirs('./scaling_results/{}/'.format(exp_name))
     except Exception as e:
         print(e)
         pass
-    attempts = glob("./bayes_logs/{}/*.json".format(exp_name))
-    logger = JSONLogger(path="./bayes_logs/{}/optimization_logs.json".format(exp_name),reset = True)
+    attempts = glob("./scaling_results/{}/*.json".format(exp_name))
+    logger = JSONLogger(path="./scaling_results/{}/optimization_logs.json".format(exp_name),reset = True)
     optimizer.subscribe(Events.OPTIMIZATION_STEP, logger)
 
     initial_points_range = np.linspace(np.log(min_bounds),np.log(max_bounds),num = 50,endpoint = True)

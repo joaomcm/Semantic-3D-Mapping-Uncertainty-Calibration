@@ -1,7 +1,7 @@
 
 from reconstruction import BayesianDropoutReconstruction,SpacedOutSampleReconstruction,HistogramVEDE,Reconstruction,LearnedGeneralizedIntegration
 from reconstruction import ProbabilisticAveragedReconstruction,HistogramReconstruction,AveragingVEDE,AveragingVEDEMeanDist,GeometricBayes,InformedAveragingVEDE,OracleInformedVEDE,GeneralizedIntegration
-from ESANet_loader import ESANetClassifier, TSegmenter,FineTunedTSegmenter,FineTunedESANet
+from utils.segmentation_model_loader import ESANetClassifier, TSegmenter,FineTunedTSegmenter,FineTunedESANet
 import open3d as o3d
 import json
 import torch
@@ -19,7 +19,7 @@ class Experiment_Generator:
         self.miu = 0.001
         self.max_sample = 6000
         self.buffer_size= 40
-        self.optimized_temperatures_template = './bayes_logs/{}/{}.json'
+        self.optimized_temperatures_template = './scaling_results/{}/{}.json'
     
     def get_reconstruction_and_model(self,experiment,process_id):
         integration = experiment['integration']

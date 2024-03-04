@@ -1,5 +1,5 @@
 import numpy as np
-from ESANet_loader import TSegmenter,FineTunedTSegmenter
+from utils.segmentation_model_loader import TSegmenter,FineTunedTSegmenter
 import torch.nn as nn
 import torch
 from datasets import Dataset,Image

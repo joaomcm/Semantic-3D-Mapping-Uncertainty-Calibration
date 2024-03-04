@@ -183,7 +183,7 @@ import seaborn as sns
 import pdb
 import torch
 from utils.my_calibration import Calibration_calc_3D,mECE_Calibration_calc_3D_fix,mECE_Calibration_calc_3D
-from ESANet_loader import ESANetClassifier, TSegmenter
+from utils.segmentation_model_loader import ESANetClassifier, TSegmenter
 from sklearn.metrics import confusion_matrix
 from utils.scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes,get_classes
 import pickle

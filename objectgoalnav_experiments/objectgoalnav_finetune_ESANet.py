@@ -11,7 +11,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 import torch.optim as optim
 from src.models.model import Upsample
-from ESANet_loader import ESANetClassifier, TSegmenter
+from utils.segmentation_model_loader import ESANetClassifier, TSegmenter
 import torch.nn as nn
 import torch
 import cv2
@@ -26,7 +26,7 @@ import albumentations as A
 import traceback
 from collections import OrderedDict
 import pickle
-from ESANet_loader import ESANetClassifier
+from utils.segmentation_model_loader import ESANetClassifier
 
 val_batch_size = 128
 train_batch_size = 64

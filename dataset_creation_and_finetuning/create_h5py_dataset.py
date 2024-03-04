@@ -20,7 +20,7 @@ if __name__ == "__main__":
     from torch.utils.data import DataLoader, Dataset
     from tqdm import tqdm
 
-    from ESANet_loader import FineTunedESANet, FineTunedTSegmenter
+    from utils.segmentation_model_loader import FineTunedESANet, FineTunedTSegmenter
     from calibration_experiments.experiment_setup import Experiment_Generator
     from utils.rendering_utils import get_camera_rays, render_depth_and_normals
     from utils.scene_definitions import get_filenames, get_fixed_train_and_val_splits

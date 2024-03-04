@@ -122,16 +122,16 @@ def main():
     )
     from glob import glob
     try:
-        os.makedirs('./bayes_logs/{}/'.format(exp_name))
+        os.makedirs('./scaling_results/{}/'.format(exp_name))
     except Exception as e:
         print(e)
         pass
         
-    attempts = glob("./bayes_logs/{}/*.json".format(exp_name))
-    logger = JSONLogger(path="./bayes_logs/{}/optimization_logs.json".format(exp_name),reset = False)
+    attempts = glob("./scaling_results/{}/*.json".format(exp_name))
+    logger = JSONLogger(path="./scaling_results/{}/optimization_logs.json".format(exp_name),reset = False)
     optimizer.subscribe(Events.OPTIMIZATION_STEP, logger)
     if(len(attempts)> 0):
-        load_logs(optimizer, logs=["./bayes_logs/{}/optimization_logs.json".format(exp_name)])
+        load_logs(optimizer, logs=["./scaling_results/{}/optimization_logs.json".format(exp_name)])
     if(len(attempts)==0):
         #always start exploring the neutral calibration, max and min points
         initial_points = {}

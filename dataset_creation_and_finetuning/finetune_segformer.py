@@ -98,7 +98,7 @@ batch_size = 12
 hub_model_id = "finetuned ScanNet2"
 
 training_args = TrainingArguments(
-    "ScanNet Finetuned SegFormer - alt",
+    "ScanNet Finetuned SegFormer",
     learning_rate=lr,
     num_train_epochs=epochs,
     per_device_train_batch_size=batch_size,

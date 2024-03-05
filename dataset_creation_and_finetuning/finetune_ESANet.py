@@ -8,6 +8,10 @@ sys.path.append(parent_dir)
 import albumentations as A
 
 sys.path.append('../external_dependencies/ESANet')
+
+parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent_dir)
+
 import traceback
 from collections import OrderedDict
 from glob import glob
@@ -44,7 +48,7 @@ lr = 0.00001
 patience = 5
 # if you want to resume finetuning from a given W&B checkpoint, set this to true and give it the checkpoint to follow
 warm_start = False
-checkpoint_to_load = 'jmc12_team/Finetuning ESANet/Try1:v27'
+checkpoint_to_load = ''
 
 fnames = get_filenames()
 

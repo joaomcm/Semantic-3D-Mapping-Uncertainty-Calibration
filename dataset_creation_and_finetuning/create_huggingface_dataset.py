@@ -3,6 +3,13 @@ import cv2
 from glob import glob
 import numpy as np
 from PIL import Image
+
+
+import sys
+import os
+parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent_dir)
+
 from utils.scene_definitions import get_filenames
 
 fnames = get_filenames()

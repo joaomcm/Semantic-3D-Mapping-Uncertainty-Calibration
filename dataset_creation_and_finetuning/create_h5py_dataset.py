@@ -78,9 +78,9 @@ if __name__ == "__main__":
     singleton_voxels_h5py = True
     train, val = get_fixed_train_and_val_splits()
     if split == "train":
-        calibration_scenes = train
+        calibration_scenes = train[:2]
     else:
-        calibration_scenes = val
+        calibration_scenes = val[:2]
 
     def render_indices(this_vbg, depth, intrinsic, pose):
         device = o3d.core.Device("CUDA:0")

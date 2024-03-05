@@ -10,7 +10,7 @@ import os
 parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent_dir)
 
-from utils.scene_definitions import get_filenames
+from utils.ScanNet_scene_definitions import get_filenames
 
 fnames = get_filenames()
 images_dir = fnames['finetune_dir']

@@ -203,7 +203,7 @@ class scannet_scene_reader:
 
 
 if __name__ == '__main__':
-    from utils.scene_definitions import get_filenames
+    from utils.ScanNet_scene_definitions import get_filenames
 
     fnames = get_filenames()
     root_dir = fnames['ScanNet_root_dir']

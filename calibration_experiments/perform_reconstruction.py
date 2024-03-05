@@ -33,7 +33,7 @@ os.environ["NUMEXPR_NUM_THREADS"] = "2" # export NUMEXPR_NUM_THREADS=6
 
 
 from experiment_setup import Experiment_Generator
-from utils.scene_definitions import get_filenames, get_larger_test_and_validation_scenes
+from utils.ScanNet_scene_definitions import get_filenames, get_larger_test_and_validation_scenes
 from utils.sens_reader import scannet_scene_reader
 
 processes = 2

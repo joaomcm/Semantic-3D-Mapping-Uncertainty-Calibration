@@ -18,7 +18,7 @@ from utils.my_calibration import (
     mECE_Calibration_calc_3D,
     mECE_Calibration_calc_3D_fix,
 )
-from utils.scene_definitions import (
+from utils.ScanNet_scene_definitions import (
     get_classes,
     get_larger_test_and_validation_scenes,get_filenames
 

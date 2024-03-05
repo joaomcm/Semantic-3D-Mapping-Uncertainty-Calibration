@@ -6,8 +6,8 @@ import pandas as pd
 from tqdm import tqdm
 import pdb
 from glob import glob
-# from scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes
-from scene_definitions import get_larger_test_and_validation_scenes,get_fixed_train_and_val_splits
+# from ScanNet_scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes
+from ScanNet_scene_definitions import get_larger_test_and_validation_scenes,get_fixed_train_and_val_splits
 import h5py
 import torch
 import torch.nn as nn

@@ -14,7 +14,7 @@ parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent_dir)
 
 from utils.my_calibration import mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D
-from utils.scene_definitions import get_filenames
+from utils.ScanNet_scene_definitions import get_filenames
 
 
 class Calibrator:

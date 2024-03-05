@@ -32,7 +32,7 @@ from torch.utils.data import DataLoader, Dataset
 from torchmetrics.classification import MulticlassAccuracy
 
 from utils.my_calibration import Cumulative_mIoU_torch
-from utils.scene_definitions import get_filenames
+from utils.ScanNet_scene_definitions import get_filenames
 from utils.segmentation_model_loader import ESANetClassifier
 
 val_batch_size = 128

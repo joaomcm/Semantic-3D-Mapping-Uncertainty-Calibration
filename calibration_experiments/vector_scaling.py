@@ -21,8 +21,8 @@ from utils.my_calibration import (
     mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D,
 )
 
-# from scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes
-from utils.scene_definitions import get_larger_test_and_validation_scenes,get_fixed_train_and_val_splits
+# from ScanNet_scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes
+from utils.ScanNet_scene_definitions import get_larger_test_and_validation_scenes,get_fixed_train_and_val_splits
 
 
 def reconstruct_scene(scene,T,rec_type = 'Naive Bayesian',segmentation_model = 'ESANET'):

@@ -38,7 +38,7 @@ from utils.my_calibration import Cumulative_mIoU
 from utils.my_calibration import (
     mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D,
 )
-from utils.scene_definitions import get_filenames
+from utils.ScanNet_scene_definitions import get_filenames
 
 torch.set_float32_matmul_precision('medium')
 

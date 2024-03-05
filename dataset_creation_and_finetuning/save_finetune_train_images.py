@@ -1,28 +1,21 @@
-# import os
-import numpy as np
-# import open3d as o3d
-# import open3d.core as o3c
-# import time
-# import matplotlib.pyplot as plt
-import pandas as pd
-import cv2
-from tqdm import tqdm
-from klampt.math import se3
-# import torch
 import pdb
-from sens_reader import scannet_scene_reader
-# import pickle
-# from utils.segmentation_model_loader import ESANetClassifier,TSegmenter
-from glob import glob
-# from my_calibration import Calibration_calc
-# from scipy.optimize import minimize_scalar,Bounds
-import traceback
-# from queue import Queue
-from joblib import Parallel,delayed
-import gc
 import cv2
+import numpy as np
+import pandas as pd
+import gc
 import os
+import traceback
+
+from joblib import Parallel, delayed
+
+
+import sys
+parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent_dir)
+
 from utils.scene_definitions import get_filenames
+from utils.sens_reader import scannet_scene_reader
+
 
 def reading_func(scene):
     lim = -1
@@ -74,8 +67,8 @@ def reading_func(scene):
     return []
 
 if __name__ == '__main__':
-    train_splits = pd.read_csv('train_split.txt',header= None)
+    train_splits = pd.read_csv('../settings/train_split.txt',header= None)
     train_splits.columns = ['scenes']
     selected_scenes = sorted(train_splits.scenes.tolist())
-    Parallel(n_jobs = 16,backend = 'multiprocessing',verbose = 100)(delayed(reading_func)(scene) for scene in selected_scenes)
+    Parallel(n_jobs = 8,backend = 'sequential',verbose = 100)(delayed(reading_func)(scene) for scene in selected_scenes)
     # reading_func(selected_scenes[0])

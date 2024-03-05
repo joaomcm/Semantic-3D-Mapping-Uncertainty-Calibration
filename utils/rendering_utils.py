@@ -4,7 +4,7 @@ import open3d.core as o3c
 from klampt.math import se3
 
 
-def render_depth_and_normals(this_vbg,depth,intrinsic,pose,device,use_depth = False):
+def render_depth_and_normals(this_vbg,depth,intrinsic,pose,device = o3d.core.Device('CUDA:0'),use_depth = False):
 
     # device = o3d.core.Device('CUDA:0')
     intrinsic = intrinsic[:3,:3].astype(np.float64)

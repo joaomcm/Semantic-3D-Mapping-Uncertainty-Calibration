@@ -126,7 +126,7 @@ def reconstruct_scene(scene,experiment_name,experiment_settings,debug,oracle):
         del rec
 
 def get_experiments():
-    a = json.load(open('./experiments_and_short_names.json','r'))
+    a = json.load(open('../settings/experiments_and_short_names.json','r'))
     experiments = a['experiments']
     return experiments
 

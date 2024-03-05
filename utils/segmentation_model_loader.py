@@ -19,15 +19,17 @@ from transformers import SegformerFeatureExtractor, SegformerForSemanticSegmenta
 
 
 class ESANetClassifier:
-    def __init__(self,temperature = 1,NYU = False):
+    def __init__(self,temperature = 1,NYU = False,our_weights = True):
         self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
-        args = pickle.load(open('./ESANet/args.p','rb'))
+        args = pickle.load(open('../external_dependencies/ESANet/args.p','rb'))
         self.model, self.device = build_model(args, n_classes=40)
-        args.ckpt_path = '../external_dependencies/ESANet/trained_models/nyuv2/r34_NBt1D_scenenet.pth'
         args.depth_scaling = 0.1
-        checkpoint = torch.load(args.ckpt_path,
-                                map_location=lambda storage, loc: storage)
-        self.model.load_state_dict(checkpoint['state_dict'])
+
+        if(not our_weights):
+            args.ckpt_path = '../external_dependencies/ESANet/trained_models/nyuv2/r34_NBt1D_scenenet.pth'
+            checkpoint = torch.load(args.ckpt_path,
+                                    map_location=lambda storage, loc: storage)
+            self.model.load_state_dict(checkpoint['state_dict'])
         self.model.eval()
         self.model.to(self.device)
         self.dataset, self.preprocessor = prepare_data(args, with_input_orig=True)

@@ -108,11 +108,12 @@ def get_ScanNet_validation_scenes():
 
 
 def get_experiments_and_short_names():
-    a = json.load(open('./experiments_and_short_names.json','r'))
+    a = json.load(open('../settings/experiments_and_short_names.json','r'))
     experiments = a['experiments']
     short_names = a['short_names']
     return experiments,short_names
 
 def get_filenames():
-    file_definitions = json.load(open('./directory_definitions.json','r'))
+
+    file_definitions = json.load(open('../settings/directory_definitions.json','r'))
     return file_definitions

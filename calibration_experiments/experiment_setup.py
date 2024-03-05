@@ -1,6 +1,6 @@
 
-from reconstruction import BayesianDropoutReconstruction,SpacedOutSampleReconstruction,HistogramVEDE,Reconstruction,LearnedGeneralizedIntegration
-from reconstruction import ProbabilisticAveragedReconstruction,HistogramReconstruction,AveragingVEDE,AveragingVEDEMeanDist,GeometricBayes,InformedAveragingVEDE,OracleInformedVEDE,GeneralizedIntegration
+from reconstruction import Reconstruction,LearnedGeneralizedIntegration
+from reconstruction import ProbabilisticAveragedReconstruction,HistogramReconstruction,GeometricBayes,GeneralizedIntegration
 from utils.segmentation_model_loader import ESANetClassifier, TSegmenter,FineTunedTSegmenter,FineTunedESANet
 import open3d as o3d
 import json
@@ -17,11 +17,9 @@ class Experiment_Generator:
         self.depth_scale = 1000.0
         self.depth_max = 5.0
         self.miu = 0.001
-        self.max_sample = 6000
-        self.buffer_size= 40
         self.optimized_temperatures_template = './scaling_results/{}/{}.json'
     
-    def get_reconstruction_and_model(self,experiment,process_id):
+    def get_reconstruction_and_model(self,experiment,process_id = 0):
         integration = experiment['integration']
         calibration = experiment['calibration']
         oracle = experiment.get('oracle',False)

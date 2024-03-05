@@ -13,3 +13,5 @@ This repository contains the code for reproducing the work of the ICRA 2024 pape
 4) Install almost all the required packages: ``` pip install -r requirements.txt ```
 
 5) Install torch for your cuda version as in : ```  pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1  --extra-index-url https://download.pytorch.org/whl/cu117 ```
+
+6) Download the pretrained weights for the finetuned Segformer (https://uofi.box.com/s/lnuxvqh77tulivbew7c9y0m6jh5y23ti) and ESANet (https://uofi.box.com/s/hd3mlqcnwh9k1i3f5ffur5kcup32htby) models and place them in their respective /segmentatioin_model_checkpoints folder

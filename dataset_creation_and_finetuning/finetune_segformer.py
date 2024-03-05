@@ -13,6 +13,11 @@ from transformers import (
     TrainingArguments,
 )
 
+
+import sys,os
+parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent_dir)
+
 from utils.scene_definitions import get_filenames
 
 fnames = get_filenames()
@@ -178,6 +183,6 @@ trainer = CustomTrainer(
 trainer.train()
 
 #saving the trained model to the best_model directory
-trainer.save_model("./best_model")
+trainer.save_model("./segmentation_model_checkpoints/Segformer")
 
 

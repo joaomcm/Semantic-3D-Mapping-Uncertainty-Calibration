@@ -22,7 +22,7 @@ All of our experiments are able to run on a machine with a i7-9700K processor, 6
 
 ## To use our simple wrapper for different reconstruction pipelines
 
-For the first use case, you can simply copy reconstruction.py into your project and see the top level example.py for reference on how to use the different kinds of reconstruction pipelines described in our paper.
+For the first use case, you can simply copy reconstruction.py into your project and see the top level example.py for reference on how to use the different kinds of reconstruction pipelines described in our paper. A small example dataset is provided (https://uofi.box.com/s/ziekvb4wqtn0edpt2tahe6m78vfvdad6) to run this example script.
 
 ## Setup instructions for reproducing paper results
 

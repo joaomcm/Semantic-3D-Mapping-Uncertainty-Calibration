@@ -32,13 +32,13 @@ from torchmetrics.classification import MulticlassAccuracy
 from tqdm import tqdm
 
 
-
 from learned_calibrators import DifferentiableVectorCalibrator
 from external_dependencies.meta_calibration.Losses.dece import DECE, mDECE
 from utils.my_calibration import Cumulative_mIoU
 from utils.my_calibration import (
     mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D,
 )
+from utils.scene_definitions import 
 
 torch.set_float32_matmul_precision('medium')
 

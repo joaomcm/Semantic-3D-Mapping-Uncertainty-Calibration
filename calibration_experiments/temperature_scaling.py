@@ -7,7 +7,7 @@ from tqdm import tqdm
 import pdb
 from glob import glob
 # from scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes
-from scene_definitions import get_larger_test_and_validation_scenes
+from scene_definitions import get_larger_test_and_validation_scenes,get_fixed_train_and_val_splits
 import h5py
 import torch
 import torch.nn as nn
@@ -102,7 +102,7 @@ def main():
     experiment_settings = json.load(open('./calibration_experiments/{}.json'.format(settings_file_name),'rb'))
     # cal_scenes,test_scenes = get_larger_test_and_validation_scenes()
     # cal_scenes = get_smaller_balanced_validation_scenes()
-    train_scenes,cal_scenes = get_larger_test_and_validation_scenes()
+    train_scenes,cal_scenes = get_fixed_train_and_val_splits()
     exp_name = experiment_settings['experiment_name']
     max_bounds = np.log(float(experiment_settings['max_bounds']))
     min_bounds = np.log(float(experiment_settings['min_bounds']))

@@ -5,7 +5,6 @@ from tqdm import tqdm
 
 def main():
     voxel_size = 0.025
-    trunc = voxel_size * 8
     res = 8
     depth_scale = 1000.0
     depth_max = 5.0

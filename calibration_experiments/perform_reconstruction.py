@@ -33,7 +33,7 @@ os.environ["NUMEXPR_NUM_THREADS"] = "2" # export NUMEXPR_NUM_THREADS=6
 
 
 from experiment_setup import Experiment_Generator
-from utils.scene_definitions import get_filenames, get_fixed_train_and_val_splits
+from utils.scene_definitions import get_filenames, get_larger_test_and_validation_scenes
 from utils.sens_reader import scannet_scene_reader
 
 processes = 2
@@ -99,6 +99,12 @@ def reconstruct_scene(scene,experiment_name,experiment_settings,debug,oracle):
             depth = data_dict['depth']
             intrinsic = o3c.Tensor(data_dict['intrinsics_depth'][:3,:3].astype(np.float64))
             depth = o3d.t.geometry.Image(depth).to(device)
+            try:
+                color = data_dict['color']
+                if(not isinstance(color,np.ndarray)):
+                    continue
+            except Exception as e:
+                continue
             semantic_label = get_semantics(data_dict['color'],depth = data_dict['depth'],x = depth.rows,y = depth.columns)
             if(oracle):
                 semantic_label_gt = cv2.resize(data_dict['semantic_label'],(depth.columns,depth.rows),interpolation= cv2.INTER_NEAREST)
@@ -158,7 +164,7 @@ def main():
         import multiprocessing
         debug = args.debug
         oracle = experiment_settings['oracle']
-        val_scenes,test_scenes = get_fixed_train_and_val_splits()
+        val_scenes,test_scenes = get_larger_test_and_validation_scenes()
         selected_scenes = sorted(test_scenes)
         p = multiprocessing.get_context('forkserver').Pool(processes = processes,maxtasksperchild = 1)
 

@@ -50,3 +50,5 @@ For the first use case, you can simply copy reconstruction.py into your project 
 
 
 For reproducing our ObjectGoalNavigation results, please check our fork of PEANUT (https://github.com/joaomcm/PEANUT/tree/traditional_mapping)- since the code for those experiments has been kept on a separate repository for organization reasons. 
+
+

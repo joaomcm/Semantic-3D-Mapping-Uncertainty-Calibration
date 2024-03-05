@@ -31,7 +31,7 @@ parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent_dir)
 
 
-from utils.scene_definitions import get_filenames, get_fixed_train_and_val_splits
+from utils.scene_definitions import get_filenames, get_larger_test_and_validation_scenes
 from reconstruction import GroundTruthGenerator
 from utils.sens_reader import scannet_scene_reader
 
@@ -135,7 +135,7 @@ def main():
     import multiprocessing
 
     torch.set_float32_matmul_precision('medium')
-    val_scenes,test_scenes = get_fixed_train_and_val_splits()
+    val_scenes,test_scenes = get_larger_test_and_validation_scenes()
     # test_scenes = get_learned_calibration_validation_scenes()
     selected_scenes = sorted(test_scenes+val_scenes)
     p = multiprocessing.get_context('forkserver').Pool(processes = processes,maxtasksperchild = 1)

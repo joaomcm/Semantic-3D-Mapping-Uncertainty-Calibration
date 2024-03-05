@@ -48,10 +48,10 @@ For the first use case, you can simply copy reconstruction.py into your project 
 
 11) Once all reconstructions are done, run ```python run_full_eval.py```, which will output the summarized results to the Results/quant_eval folder.
 
-
-For reproducing our ObjectGoalNavigation results, please check our fork of PEANUT (https://github.com/joaomcm/PEANUT/tree/traditional_mapping)- since the code for those experiments has been kept on a separate repository for organization reasons. 
 Additional scripts for performing 2D and 3D temperature and vector calibration can be found in the folder calibration_experiments
 Additional scripts for finetuning Segformer and ESANet for ScanNet use can be found in the dataset_creation_and_finetuning folder.
+For reproducing our ObjectGoalNavigation results, please check our fork of PEANUT (https://github.com/joaomcm/PEANUT/tree/traditional_mapping)- since the code for those experiments has been kept on a separate repository for organization reasons, except for the code for finetuning the segmentation models on HM3D data.
+
 
 ## Instructions on estimating the GLFS model parameters:
 

@@ -1,7 +1,6 @@
 if __name__ == "__main__":
     import argparse
     import gc
-    import os
     import pdb
     import pickle
     import traceback
@@ -20,6 +19,12 @@ if __name__ == "__main__":
     from torch.utils.data import DataLoader, Dataset
     from tqdm import tqdm
 
+
+    import sys
+    import os
+    parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    sys.path.append(parent_dir)
+
     from utils.segmentation_model_loader import FineTunedESANet, FineTunedTSegmenter
     from calibration_experiments.experiment_setup import Experiment_Generator
     from utils.rendering_utils import get_camera_rays, render_depth_and_normals
@@ -37,7 +42,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--model_type",
-        help="name of the model for which the logits are being stored, valid values = [ESANET,Segformer]",
+        help="name of the model for which the logits are being stored, valid values = [ESANet,Segformer]",
     )
     args = parser.parse_args()
 
@@ -52,17 +57,17 @@ if __name__ == "__main__":
         split
     )
     assert (
-        model_type in ["ESANET", "Segformer"]
-    ), "The selected model_type,{},is an invalid model. Valid model types are [ESANET,Segformer]".format(
+        model_type in ["ESANet", "Segformer"]
+    ), "The selected model_type,{},is an invalid model. Valid model types are [ESANet,Segformer]".format(
         model_type
     )
     dataset_filename = fnames[
         "h5py_dataset_dir"
     ] + "/{}_calibration_{}_logits_lzf.hdf5".format(model_type, split)
     root_dir = fnames["ScanNet_root_dir"]
-    vbg_file_template = fnames["Results_dir"] + "/{}/vbg/{}/vbg.npz"
-    experiment = "sanity_checks"
-    singleton_save_folder = fnames["singleton_dataset_dir"] + "{}/{}/{}"
+    vbg_file_template = fnames["results_dir"] + "/{}/gt_vbg_{}.npz"
+    experiment = "reconstruction_gts"
+    singleton_save_folder = fnames["singleton_dataset_dir"] + "/{}/{}/{}"
     singleton_save_dir = singleton_save_folder + "/{}.p"
     calibration_index_dict = "{}_calibration_index_dict.p".format(model_type)
     base_dataset = True
@@ -73,9 +78,9 @@ if __name__ == "__main__":
     singleton_voxels_h5py = True
     train, val = get_fixed_train_and_val_splits()
     if split == "train":
-        calibration_scenes = train
+        calibration_scenes = train[:2]
     else:
-        calibration_scenes = val
+        calibration_scenes = val[:2]
 
     def render_indices(this_vbg, depth, intrinsic, pose):
         device = o3d.core.Device("CUDA:0")
@@ -144,7 +149,8 @@ if __name__ == "__main__":
 
             try:
                 g = f.create_group(scene)
-            except:
+            except Exception as e:
+                print(e)
                 g = f[scene]
             lim = -1
             my_ds = scannet_scene_reader(root_dir, scene, lim=lim, disable_tqdm=True)
@@ -282,7 +288,7 @@ if __name__ == "__main__":
                 },
             }
 
-            rec, model = EG.get_reconstruction_and_model(experiment=experiment)
+            rec, model = EG.get_reconstruction_and_model(experiment=experiment,process_id = 0)
             get_semantics = model.get_pred_probs
             # print(scene)
             g = f[scene]
@@ -402,8 +408,10 @@ if __name__ == "__main__":
 
     if update_the_index_dict:
         f = h5py.File(dataset_filename, "r")
-        idx_dict = pickle.load(open(calibration_index_dict, "rb"))
-
+        if(os.path.exists(calibration_index_dict)):
+            idx_dict = pickle.load(open(calibration_index_dict, "rb"))
+        else:
+            idx_dict = {}
         for key in tqdm(f.keys()):
             g = f[key]
             indices = g["indices"][:]
@@ -583,7 +591,6 @@ if __name__ == "__main__":
         train_dataloader = DataLoader(train_ds,batch_size = 1,shuffle = False,collate_fn = debug_collate,num_workers = 12,prefetch_factor = 3)
 
         if(create):
-            print('entering creation?')
             f = h5py.File(filename,'w')
 
             lim = len(train_ds)

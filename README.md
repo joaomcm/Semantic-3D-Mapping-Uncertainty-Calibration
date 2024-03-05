@@ -2,6 +2,7 @@
 This repository contains the code for reproducing the work of the ICRA 2024 paper "On the Overconfidence Problem in Semantic 3D Mapping", as well as the code for tuning the parameters of the Generalized Learned Fusion Strategy (GLFS) introduced in this paper.
 
 
+
 ## Setup instructions
 
 1) Clone this repository and its submodules : ``` git clone --recurse-submodules git@github.com:joaomcm/Semantic-3D-Mapping-Uncertainty-Calibration.git ```

@@ -6,8 +6,14 @@ from glob import glob
 import h5py
 import torch
 import torch.nn as nn
-from utils.my_calibration import mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D
 import argparse
+
+import sys
+import os
+parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent_dir)
+
+from utils.my_calibration import mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D
 from utils.scene_definitions import get_filenames
 
 

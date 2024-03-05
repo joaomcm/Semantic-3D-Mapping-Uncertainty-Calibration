@@ -1,30 +1,48 @@
+import json
 import os
+import pdb
+import pickle
+import sys
+import time
+from copy import deepcopy
+from glob import glob
+
+import cv2
+import matplotlib.pyplot as plt
 import numpy as np
 import open3d as o3d
 import open3d.core as o3c
-import time
-import matplotlib.pyplot as plt
 import pandas as pd
-import cv2
-from tqdm.notebook import tqdm
-import pickle
-import pickle
-from glob import glob
-from copy import deepcopy
-from scipy.stats import entropy
-import time
-import torch.nn as nn
+import seaborn as sns
 import torch
+import torch.nn as nn
+from scipy.stats import entropy
 from torchmetrics.functional import jaccard_index
-from utils.scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes,get_classes
-import json
-import pdb
+from tqdm.notebook import tqdm
+
+parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent_dir)
+
+from utils.my_calibration import (
+    BrierScore3D,
+    Calibration_calc_3D,
+    mECE_Calibration_calc_3D,
+    mECE_Calibration_calc_3D_fix,
+)
+from utils.scene_definitions import (
+    get_classes,
+    get_fixed_train_and_val_splits,get_filenames
+
+)
 
 evaluation_start = 0
 no_void =  True
-results_dir = '/scratch/bbuq/jcorreiamarques/3d_calibration/Results'
+fnames = get_filenames()
+
+results_dir = fnames['results_dir']
+
 def get_experiments_and_short_names():
-    a = json.load(open('./experiments_and_short_names.json','r'))
+    a = json.load(open('../settings/experiments_and_short_names.json','r'))
     experiments = a['experiments']
     short_names = a['short_names']
     return experiments,short_names
@@ -34,7 +52,7 @@ def compute_mIoUs():
     experiments,short_names = get_experiments_and_short_names()
     
     
-    val_scenes,test_scenes = get_larger_test_and_validation_scenes()
+    val_scenes,test_scenes = get_fixed_train_and_val_splits()
 
     # selected_scenes = test_scenes
     selected_scenes = test_scenes
@@ -57,8 +75,8 @@ def compute_mIoUs():
         totals = []
         for scene in tqdm(selected_scenes,desc = '{} mIoUs'.format(experiment),position = 1):
             pcd_colors = []
-            gt_pcd_file = '{}/sanity_checks/gt_pcd_{}.pcd'.format(results_dir,scene)
-            gt_labels_file = '{}/sanity_checks/gt_labels_{}.p'.format(results_dir,scene)
+            gt_pcd_file = '{}/reconstruction_gts/gt_pcd_{}.pcd'.format(results_dir,scene)
+            gt_labels_file = '{}/reconstruction_gts/gt_labels_{}.p'.format(results_dir,scene)
 
             gt_pcd = o3d.io.read_point_cloud(gt_pcd_file)
             gt_labels= pickle.load(open(gt_labels_file,'rb'))
@@ -135,7 +153,7 @@ def compute_mIoUs():
             if(absents[scene]):
                 metrics[i,np.array(list(absents[scene]))] = np.nan
 
-        import pandas as pd 
+        import pandas as pd
 
         df = pd.DataFrame(metrics)
         classes = get_classes()
@@ -163,31 +181,7 @@ def compute_mIoUs():
     transposed_df.to_excel('{}/quant_eval/3D IoUs.xlsx'.format(results_dir))
 
 
-import os
-import numpy as np
-import open3d as o3d
-import open3d.core as o3c
-import time
-import matplotlib.pyplot as plt
-import pandas as pd
-import cv2
-from tqdm.notebook import tqdm
-import pickle
-from glob import glob
-from copy import deepcopy
-from scipy.stats import entropy
-import time
-import torch.nn as nn
-import torch
-import seaborn as sns
-import pdb
-import torch
-from utils.my_calibration import Calibration_calc_3D,mECE_Calibration_calc_3D_fix,mECE_Calibration_calc_3D
-from utils.segmentation_model_loader import ESANetClassifier, TSegmenter
-from sklearn.metrics import confusion_matrix
-from utils.scene_definitions import get_larger_test_and_validation_scenes,get_smaller_balanced_validation_scenes,get_original_small_validation_scenes,get_smaller_test_scenes,get_classes
-import pickle
-import json
+
 
 
 def compute_mECEs():
@@ -199,7 +193,7 @@ def compute_mECEs():
     classes = get_classes()
 
     # experiment = 'Segformer Direct 3D unCalibrated Large Raw Logits'
-    cal_scenes,test_scenes = get_larger_test_and_validation_scenes()
+    cal_scenes,test_scenes = get_fixed_train_and_val_splits()
     selected_scenes = test_scenes
 
 
@@ -229,8 +223,8 @@ def compute_mECEs():
         for scene in tqdm(selected_scenes,desc = 'ECEs',position = 2):
             # per_scene_cal =  mECE_Calibration_calc_3D(no_void = no_void)
             # per_scene_tl_ECE = mECE_Calibration_calc_3D_fix(no_void = no_void)
-            gt_pcd_file = '{}/sanity_checks/gt_pcd_{}.pcd'.format(results_dir,scene)
-            gt_labels_file = '{}/sanity_checks/gt_labels_{}.p'.format(results_dir,scene)
+            gt_pcd_file = '{}/reconstruction_gts/gt_pcd_{}.pcd'.format(results_dir,scene)
+            gt_labels_file = '{}/reconstruction_gts/gt_labels_{}.p'.format(results_dir,scene)
             gt_pcd = o3d.io.read_point_cloud(gt_pcd_file)
             gt_labels= pickle.load(open(gt_labels_file,'rb'))
             pcd_file = sorted(glob(pcds_template.format(results_dir,experiment,scene)))[-1]
@@ -351,32 +345,12 @@ def compute_mECEs():
     #     plt.savefig('{}/mECE Analysis/plots/Segformer3/Rel_diagrams_by_experiment_{}.png'.format(results_dir,c),bbox_inches = 'tight')
     #     plt.show()
 
-import os
-import numpy as np
-import open3d as o3d
-import open3d.core as o3c
-import time
-import matplotlib.pyplot as plt
-import pandas as pd
-import cv2
-from tqdm.notebook import tqdm
-import pickle
-import pickle
-from glob import glob
-from copy import deepcopy
-from scipy.stats import entropy
-import time
-import torch.nn as nn
-import torch
-from torchmetrics.functional import jaccard_index
-from utils.my_calibration import Calibration_calc_3D, mECE_Calibration_calc_3D,BrierScore3D
-from utils.scene_definitions import get_larger_test_and_validation_scenes
-import json
-import pdb
+
+
 
 # experiment = 'Segformer Direct 3D unCalibrated Large Raw Logits'
 def compute_brier_scores():
-    cal_scenes,test_scenes = get_larger_test_and_validation_scenes()
+    cal_scenes,test_scenes = get_fixed_train_and_val_splits()
     selected_scenes = test_scenes
 
     experiments,short_names = get_experiments_and_short_names()
@@ -404,8 +378,8 @@ def compute_brier_scores():
         for scene in selected_scenes:
             per_scene_cal =  metric(no_void = no_void)
 
-            gt_pcd_file = '{}/sanity_checks/gt_pcd_{}.pcd'.format(results_dir,scene)
-            gt_labels_file = '{}/sanity_checks/gt_labels_{}.p'.format(results_dir,scene)
+            gt_pcd_file = '{}/reconstruction_gts/gt_pcd_{}.pcd'.format(results_dir,scene)
+            gt_labels_file = '{}/reconstruction_gts/gt_labels_{}.p'.format(results_dir,scene)
             gt_pcd = o3d.io.read_point_cloud(gt_pcd_file)
             gt_labels= pickle.load(open(gt_labels_file,'rb'))
             pcd_file = sorted(glob(pcds_template.format(results_dir,experiment,scene)))[-1]
@@ -479,6 +453,8 @@ def compute_brier_scores():
     df = df.drop('experiments')
     df = df.reset_index(drop = False)
 #     pdb.set_trace()
+    if(not os.path.exists('{}/quant_eval'.format(results_dir))):
+        os.makedirs('{}/quant_eval'.format(results_dir),exist_ok=True)
     df.to_excel('{}/quant_eval/brier_scores.xlsx'.format(results_dir),index = False)
 
 

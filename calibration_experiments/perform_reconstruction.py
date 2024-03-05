@@ -4,7 +4,9 @@ from tkinter import E
 faulthandler.enable()
 
 import os
-
+import sys
+parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent_dir)
 
 os.environ["OMP_NUM_THREADS"] = "8" # export OMP_NUM_THREADS=4
 os.environ["OPENBLAS_NUM_THREADS"] = "8" # export OPENBLAS_NUM_THREADS=4 
@@ -157,7 +159,7 @@ def main():
         # experiment = 'Learned Integration Ablation - vector only.json'
         # experiment = 'learned_generalized_integration.json'
         experiment_name = experiment
-        experiment_settings = json.load(open('./experiments/{}.json'.format(experiment),'rb'))
+        experiment_settings = json.load(open('../settings/reconstruction_experiment_settings/{}.json'.format(experiment),'rb'))
         experiment_settings.update({'experiment_name':experiment_name})
         import multiprocessing
         debug = args.debug

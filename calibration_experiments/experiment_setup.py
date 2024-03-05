@@ -1,13 +1,21 @@
-
-from reconstruction import Reconstruction,LearnedGeneralizedIntegration
-from reconstruction import ProbabilisticAveragedReconstruction,HistogramReconstruction,GeometricBayes,GeneralizedIntegration
-from utils.segmentation_model_loader import ESANetClassifier, TSegmenter,FineTunedTSegmenter,FineTunedESANet
 import open3d as o3d
 import json
 import torch
 import pickle
 import numpy as np
 import os
+
+import os
+import sys
+parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent_dir)
+
+
+from reconstruction import Reconstruction,LearnedGeneralizedIntegration
+from reconstruction import ProbabilisticAveragedReconstruction,HistogramReconstruction,GeometricBayes,GeneralizedIntegration
+from utils.segmentation_model_loader import ESANetClassifier, TSegmenter,FineTunedTSegmenter,FineTunedESANet
+
+
 class Experiment_Generator:
     def __init__(self):
         self.voxel_size = 0.025 #3.0 / 512

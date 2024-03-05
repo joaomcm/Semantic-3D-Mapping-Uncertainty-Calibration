@@ -1,8 +1,8 @@
 {
-"results_dir":"/home/motion/data/GLFS_validation/Results",
-"ScanNet_root_dir":"/home/motion/data/scannet_v2",
-"finetune_dir":"/home/motion/data/GLFS_validation/network_finetuning",
-"h5py_dataset_dir":"/home/motion/data/GLFS_validation/h5py_datasets",
-"singleton_dataset_dir":"/home/motion/data/GLFS_validation/per_voxel",
-"ScanNet_huggingface_dataset_dir":"/home/motion/data/GLFS_validation/hugdata"
+"results_dir":"",
+"ScanNet_root_dir":"",
+"finetune_dir":"",
+"h5py_dataset_dir":"",
+"singleton_dataset_dir":"",
+"ScanNet_huggingface_dataset_dir":""
 }

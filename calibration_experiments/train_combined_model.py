@@ -1,6 +1,6 @@
-from glob import glob 
 import os
-
+import sys
+from glob import glob
 
 os.environ["OMP_NUM_THREADS"] = "8" # export OMP_NUM_THREADS=4
 os.environ["OPENBLAS_NUM_THREADS"] = "8" # export OPENBLAS_NUM_THREADS=4 
@@ -8,32 +8,38 @@ os.environ["MKL_NUM_THREADS"] = "8" # export MKL_NUM_THREADS=6
 os.environ["VECLIB_MAXIMUM_THREADS"] = "8" # export VECLIB_MAXIMUM_THREADS=4
 os.environ["NUMEXPR_NUM_THREADS"] = "8" # export NUMEXPR_NUM_THREADS=6
 
+parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent_dir)
 
-import numpy as np
-import torch
-import torch.nn as nn
-from tqdm import tqdm
-import pickle
-from torch.utils.data import Dataset, DataLoader
-import pdb
-from torch.nn.utils.rnn import pad_sequence
-import torch.optim as optim
-from pytorch_lightning.callbacks.early_stopping import EarlyStopping
-from pytorch_lightning.callbacks import ModelCheckpoint
-from learned_calibrators import DifferentiableVectorCalibrator
-import wandb
-from torchmetrics.classification import MulticlassAccuracy
-import torch
-import torch.nn as nn
-import pytorch_lightning as pl
-from pytorch_lightning.loggers import WandbLogger
-from meta_calibration.Losses.dece import DECE, mDECE
-from pytorch_lightning.callbacks import Callback
-from utils.my_calibration import Cumulative_mIoU
-from utils.my_calibration import mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D
-import gc
-import h5py
 import argparse
+import gc
+import pdb
+import pickle
+
+import h5py
+import numpy as np
+import pytorch_lightning as pl
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import wandb
+from pytorch_lightning.callbacks import Callback, ModelCheckpoint
+from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+from pytorch_lightning.loggers import WandbLogger
+from torch.nn.utils.rnn import pad_sequence
+from torch.utils.data import DataLoader, Dataset
+from torchmetrics.classification import MulticlassAccuracy
+from tqdm import tqdm
+
+
+
+from learned_calibrators import DifferentiableVectorCalibrator
+from external_dependencies.meta_calibration.Losses.dece import DECE, mDECE
+from utils.my_calibration import Cumulative_mIoU
+from utils.my_calibration import (
+    mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D,
+)
+
 torch.set_float32_matmul_precision('medium')
 
 
@@ -501,7 +507,7 @@ if __name__ == '__main__':
     if(model_name == 'ESANet'):
         project_name = 'ESANET Learned Calibration'
     else:
-        project_name = 'unified integration optimization lightning - large Dataset'
+        project_name = 'Segformer Learned Calibration'
 
     wandb.login(key = 'eb2c2b155df626514fee504f43abe5fb32cb170d')
     wandb_logger = WandbLogger(name= args.exp_name,

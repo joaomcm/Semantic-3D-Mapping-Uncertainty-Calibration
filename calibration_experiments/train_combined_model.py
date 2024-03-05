@@ -38,11 +38,11 @@ from utils.my_calibration import Cumulative_mIoU
 from utils.my_calibration import (
     mECE_Calibration_calc_3D_fix as mECE_Calibration_calc_3D,
 )
-from utils.scene_definitions import 
+from utils.scene_definitions import get_filenames
 
 torch.set_float32_matmul_precision('medium')
 
-
+fnames = get_filenames()
 nll_weight_type = 'log'
 assert nll_weight_type in ['sqrt','log'], "Invalid choice of Weight Type {}".format(nll_weight_type)
 # log of the inverse frequency small dataset
@@ -331,9 +331,9 @@ class CombinedTrainer(pl.LightningModule):
         # train_ds = voxel_readings_dataset(train_directory)
         # train_dataloader = DataLoader(train_ds,batch_size = batch_size,shuffle = True,collate_fn = debug_collate,num_workers = 5,prefetch_factor = 3)
         if(self.model_name == 'ESANet'):
-            train_directory = '/tmp/ESANET_train.h5py'
+            train_directory = fnames['singleton_dataset_dir'] + '/ESANet_train.h5py'
         elif(self.model_name == 'Segformer'):
-            train_directory = '/tmp/Segformer_train.h5py'
+            train_directory = fnames['singleton_dataset_dir'] + '/Segformer_train.h5py'
         tmp = h5py.File(train_directory,'r')
         size = tmp['logits'].shape[0]
         tmp.close()
@@ -346,9 +346,9 @@ class CombinedTrainer(pl.LightningModule):
         # val_ds = voxel_readings_dataset(val_directory)
         # val_dataloader = DataLoader(val_ds,batch_size = batch_size,shuffle = False,collate_fn = debug_collate,num_workers = 5,prefetch_factor = 3)
         if(self.model_name == 'ESANet'):
-            val_directory = '/tmp/ESANET_validation.h5py'
+            val_directory = fnames['singleton_dataset_dir'] + '/ESANet_validation.h5py'
         elif(self.model_name == 'Segformer'):
-            val_directory = '/tmp/Segformer_validation.h5py'        
+            val_directory = fnames['singleton_dataset_dir'] + '/Segformer_validation.h5py'        
         
         tmp = h5py.File(val_directory,'r')
         size = tmp['logits'].shape[0]

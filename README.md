@@ -45,3 +45,8 @@ For the first use case, you can simply copy reconstruction.py into your project 
 9) Create the ground truth reconstruction files by executing ```python create_reconstruction_gts.py```
 
 10) Run ```python perform_reconstruction.py``` to run all the reconstruction experiments described in experiments_and_short_names
+
+11) Once all reconstructions are done, run ```python run_full_eval.py```, which will output the summarized results to the Results/quant_eval folder.
+
+
+For reproducing our ObjectGoalNavigation results, please check our fork of PEANUT (https://github.com/joaomcm/PEANUT/tree/traditional_mapping)- since the code for those experiments has been kept on a separate repository for organization reasons. 

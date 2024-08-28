@@ -112,7 +112,7 @@ def get_indices_from_points(voxel_grid,points,res = 8,voxel_size = 0.025,device 
 
 class Reconstruction:
 
-    def __init__(self,depth_scale = 1000.0,depth_max=5.0,res = 8,voxel_size = 0.025,trunc_multiplier = 8,n_labels = None,integrate_color = True,device = o3d.core.Device('CUDA:0'),miu = 0.001):
+    def __init__(self,depth_scale = 1000.0,depth_max=5.0,res = 8,voxel_size = 0.025,trunc_multiplier = 8,n_labels = None,integrate_color = True,device = o3d.core.Device('CUDA:0'),miu = 0.001,weight_threshold = 10,block_count = 1000000):
         """Initializes the TSDF reconstruction pipeline using voxel block grids, ideally using a GPU device for efficiency. 
 
         Args:
@@ -135,32 +135,34 @@ class Reconstruction:
         self.semantic_integration = self.n_labels is not None
         self.miu = miu
         self.trunc = self.voxel_size * trunc_multiplier
+        self.block_count = block_count
+
         self.initialize_vbg()
         self.rays = None
         self.torch_device = torch.device('cuda')
-
+        self.weight_threshold = weight_threshold
     def initialize_vbg(self):
         if(self.integrate_color and (self.n_labels is None)):
             self.vbg = o3d.t.geometry.VoxelBlockGrid(
             ('tsdf', 'weight', 'color'),
             (o3c.float32, o3c.float32, o3c.float32), ((1), (1), (3)),
-            self.voxel_size,self.res, 30000, self.device)
+            self.voxel_size,self.res, block_count = self.block_count, device = self.device)
         elif((self.integrate_color == False) and (self.n_labels is not None)):
             self.vbg = o3d.t.geometry.VoxelBlockGrid(
             ('tsdf', 'weight', 'label'),
             (o3c.float32, o3c.float32, o3c.float32), ((1), (1), (self.n_labels)),
-            self.voxel_size,self.res, 30000, self.device)
+            self.voxel_size,self.res, block_count = self.block_count,device =  self.device)
         elif((self.integrate_color) and (self.n_labels is not None)):
             self.vbg = o3d.t.geometry.VoxelBlockGrid(
             ('tsdf', 'weight','color','label'),
             (o3c.float32, o3c.float32, o3c.float32,o3c.float32), ((1), (1),(3),(self.n_labels)),
-            self.voxel_size,self.res, 30000, self.device)
+            self.voxel_size,self.res, block_count = self.block_count, device = self.device)
         else:
             print('No color or Semantics')
             self.vbg = o3d.t.geometry.VoxelBlockGrid(
             ('tsdf', 'weight'),
             (o3c.float32, o3c.float32), ((1), (1)),
-            self.voxel_size,self.res, 30000, self.device)
+            self.voxel_size,self.res, block_count = 100000, device =  self.device)
 
 
     def update_vbg(self,depth,intrinsic,pose,color = None,semantic_label = None):
@@ -248,6 +250,8 @@ class Reconstruction:
             self.update_semantics(semantic_label,v_proj,u_proj,valid_voxel_indices,mask_inlier,weight)
         weight[valid_voxel_indices] = wp
         o3d.core.cuda.synchronize()
+        o3d.core.cuda.release_cache()
+
         
 
     def update_color(self,color,depth,valid_voxel_indices,mask_inlier,w,wp,v_proj,u_proj):
@@ -261,6 +265,7 @@ class Reconstruction:
                             color_readings[mask_inlier]) / (wp)
         o3d.core.cuda.synchronize()
         
+
     def update_semantics(self,semantic_label,v_proj,u_proj,valid_voxel_indices,mask_inlier,weight):
         # performing semantic integration
         #  Laplace Smoothing of the observation
@@ -288,7 +293,7 @@ class Reconstruction:
         Returns:
             open3d.cpu.pybind.t.geometry.PointCloud, np.array(N_points,n_labels) (or None)
         """
-        pcd = self.vbg.extract_point_cloud()
+        pcd = self.vbg.extract_point_cloud(weight_threshold = self.weight_threshold)
         pcd = pcd.to_legacy()
         sm = nn.Softmax(dim = 1)
         target_points = np.asarray(pcd.points)
@@ -307,13 +312,18 @@ class Reconstruction:
         else:
             return pcd,None
 
-    def extract_triangle_mesh(self):
+    def extract_triangle_mesh(self,weight_thold = None):
         """Returns the current (colored) mesh and the current probability for each class estimate for each of the vertices, if performing metric-semantic reconstruction
 
         Returns:
             open3d.cpu.pybind.geometry.TriangleMesh, np.array(N_vertices,n_labels) (or None)
         """
-        mesh = self.vbg.extract_triangle_mesh()
+
+        if(weight_thold is None):
+            mesh = self.vbg.extract_triangle_mesh(weight_threshold = self.weight_threshold)
+        else:
+            mesh = self.vbg.extract_triangle_mesh(weight_threshold = weight_thold)
+
         mesh = mesh.to_legacy()
         sm = nn.Softmax(dim =1)
         if(self.semantic_integration):
@@ -334,8 +344,8 @@ class Reconstruction:
         self.vbg.save(path)
 
 class GroundTruthGenerator(Reconstruction):
-    def __init__(self,depth_scale = 1000.0,depth_max=5.0,res = 8,voxel_size = 0.025,trunc_multiplier = 8,n_labels = None,integrate_color = True,device = o3d.core.Device('CUDA:0'),miu = 0.001):
-        super().__init__(depth_scale,depth_max,res,voxel_size,trunc_multiplier,n_labels,integrate_color,device,miu)
+    def __init__(self,depth_scale = 1000.0,depth_max=5.0,res = 8,voxel_size = 0.025,trunc_multiplier = 8,n_labels = None,integrate_color = True,device = o3d.core.Device('CUDA:0'),miu = 0.001,block_count = 30000):
+        super().__init__(depth_scale,depth_max,res,voxel_size,trunc_multiplier,n_labels,integrate_color,device,miu,block_count = block_count)
 
     def update_semantics(self,semantic_label,v_proj,u_proj,valid_voxel_indices,mask_inlier,weight):
         "takes in the GT mask resized to the depth image size"
@@ -410,13 +420,13 @@ class ProbabilisticAveragedReconstruction(Reconstruction):
             self.vbg = o3d.t.geometry.VoxelBlockGrid(
             ('tsdf', 'weight','label','semantic_weight'),
             (o3c.float32, o3c.float32, o3c.float32,o3c.float32), ((1), (1), (self.n_labels),(1)),
-            self.voxel_size,self.res, 30000, self.device)
+            self.voxel_size,self.res, self.block_count, self.device)
             self.original_size = self.vbg.attribute('label').shape[0]
         else:
             self.vbg = o3d.t.geometry.VoxelBlockGrid(
             ('tsdf', 'weight','label','semantic_weight','color'),
             (o3c.float32, o3c.float32, o3c.float32,o3c.float32,o3c.float32), ((1), (1), (self.n_labels),(1),(3)),
-            self.voxel_size,self.res, 30000, self.device)
+            self.voxel_size,self.res, self.block_count, self.device)
             self.original_size = self.vbg.attribute('label').shape[0]
 
     def update_semantics(self, semantic_label, v_proj, u_proj, valid_voxel_indices, mask_inlier, weight):
@@ -558,8 +568,8 @@ class GeometricBayes(Reconstruction):
 
 class GeneralizedIntegration(Reconstruction):
     def __init__(self, depth_scale=1000, depth_max=5, res=8, voxel_size=0.025, trunc_multiplier=8, n_labels=None, integrate_color=True, device=o3d.core.Device('CUDA:0'), 
-                 miu=0.001,epsilon = 0,L = 0,torch_device = 'cuda:0',T=np.array(1)):
-        super().__init__(depth_scale, depth_max, res, voxel_size, trunc_multiplier, n_labels, integrate_color, device, miu)
+                 miu=0.001,epsilon = 0,L = 0,torch_device = 'cuda:0',T=np.array(1),block_count = 30000):
+        super().__init__(depth_scale, depth_max, res, voxel_size, trunc_multiplier, n_labels, integrate_color, device, miu,block_count = block_count)
         self.epsilon = epsilon
         self.L = L
         self.torch_device = torch_device
@@ -569,7 +579,7 @@ class GeneralizedIntegration(Reconstruction):
         self.vbg = o3d.t.geometry.VoxelBlockGrid(
         ('tsdf', 'weight', 'log_label','label','semantic_weight'),
         (o3c.float32, o3c.float32, o3c.float32,o3c.float32,o3c.float32), ((1), (1), (self.n_labels),(self.n_labels),(1)),
-        self.voxel_size,self.res, 30000, self.device)
+        self.voxel_size,self.res, self.block_count, self.device)
         self.original_size = self.vbg.attribute('label').shape[0]
     def get_epsilon_and_L(self,semantic_label=0,semantic_readings=0):
         epsilon = o3c.Tensor([self.epsilon]).to(self.device)
